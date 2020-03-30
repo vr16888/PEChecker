@@ -2,7 +2,6 @@ package headers
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.sql.Timestamp
 
 class COFFHeader {
     private static final int HEADER_LENGTH = 20
