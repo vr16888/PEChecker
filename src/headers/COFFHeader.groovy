@@ -1,5 +1,7 @@
 package headers
 
+import enums.MachineType
+
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -7,7 +9,7 @@ class COFFHeader {
     private static final int HEADER_LENGTH = 20
 
     /** The CPU that this file is intended for */
-    public final short Machine
+    public final MachineType Machine
 
     /** The number of sections in the file. */
     public final short NumberOfSections
@@ -40,7 +42,7 @@ class COFFHeader {
     public COFFHeader(ByteArrayInputStream bytes) {
         DataInputStream dataInputStream = new DataInputStream(bytes)
 
-        Machine = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        Machine = MachineType.valueOf(ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort())
         NumberOfSections = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
         TimeDateStamp = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
         PointerToSymbolTable = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
