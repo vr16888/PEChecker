@@ -1,5 +1,6 @@
 package headers
 
+import enums.MagicNumber
 import types.ImageDataDir
 
 import java.nio.ByteBuffer
@@ -10,7 +11,7 @@ class OptionalHeader {
     private boolean IS_32_BIT
 
     /** Standard fields */
-    public final short MAGIC_NUMBER
+    public final MagicNumber MAGIC_NUMBER
     public final byte MAJOR_LINKER_VERSION
     public final byte MINOR_LINKER_VERSION
     public final int SIZE_OF_CODE
@@ -66,7 +67,7 @@ class OptionalHeader {
     public OptionalHeader(ByteArrayInputStream bytes) {
         DataInputStream dataInputStream = new DataInputStream(bytes)
 
-        MAGIC_NUMBER = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        MAGIC_NUMBER = MagicNumber.valueOf(ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort())
         MAJOR_LINKER_VERSION = dataInputStream.readByte()
         MINOR_LINKER_VERSION = dataInputStream.readByte()
         SIZE_OF_CODE = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
@@ -76,7 +77,7 @@ class OptionalHeader {
         BASE_OF_CODE = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
         BASE_OF_DATA = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
 
-        IS_32_BIT = MAGIC_NUMBER == 1234
+        IS_32_BIT = MAGIC_NUMBER == MagicNumber.PE32
 
         if (IS_32_BIT) {
             IMAGE_BASE = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
@@ -118,6 +119,8 @@ class OptionalHeader {
 
         EXPORT_TABLE = new ImageDataDir(ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(),
                 ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt())
+        IMPORT_TABLE = new ImageDataDir(ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(),
+                ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt())
         RESOURCE_TABLE = new ImageDataDir(ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(),
                 ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt())
         EXCEPTION_TABLE = new ImageDataDir(ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(),
@@ -127,7 +130,7 @@ class OptionalHeader {
         BASE_RELOCATION_TABLE = new ImageDataDir(ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(),
                 ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt())
 
-        BASE_RELOCATION_TABLE = new ImageDataDir(ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(),
+        DEBUG = new ImageDataDir(ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(),
                 ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt())
         COPYRIGHT = new ImageDataDir(ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(),
                 ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt())
