@@ -1,0 +1,4 @@
+package headers
+
+class COFFHeader {
+}
