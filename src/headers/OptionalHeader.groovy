@@ -67,8 +67,8 @@ class OptionalHeader {
         DataInputStream dataInputStream = new DataInputStream(bytes)
 
         MAGIC_NUMBER = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
-        MAJOR_LINKER_VERSION = ByteBuffer.wrap(dataInputStream.readNBytes(1)).order(ByteOrder.LITTLE_ENDIAN).getChar()
-        MINOR_LINKER_VERSION = ByteBuffer.wrap(dataInputStream.readNBytes(1)).order(ByteOrder.LITTLE_ENDIAN).getChar()
+        MAJOR_LINKER_VERSION = dataInputStream.readByte()
+        MINOR_LINKER_VERSION = dataInputStream.readByte()
         SIZE_OF_CODE = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
         SIZE_OF_INIT_DATA = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
         SIZE_OF_UNINIT_DATA = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
@@ -77,13 +77,6 @@ class OptionalHeader {
         BASE_OF_DATA = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
 
         IS_32_BIT = MAGIC_NUMBER == 1234
-
-        bytes.reset()
-        if (IS_32_BIT) {
-            bytes.skip(28)
-        } else {
-            bytes.skip(24)
-        }
 
         if (IS_32_BIT) {
             IMAGE_BASE = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
@@ -122,13 +115,6 @@ class OptionalHeader {
 
         LOADER_FLAGS = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
         NUMBER_OF_RVA_AND_SIZES = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
-
-        bytes.reset()
-        if (this.IS_32_BIT) {
-            bytes.skip(96)
-        } else {
-            bytes.skip(112)
-        }
 
         EXPORT_TABLE = new ImageDataDir(ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(),
                 ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt())

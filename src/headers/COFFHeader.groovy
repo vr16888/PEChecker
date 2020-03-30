@@ -34,6 +34,9 @@ class COFFHeader {
      */
     public final short SizeOfOptionalHeader
 
+    /** Flags with information about the file. */
+    public final short Characteristics;
+
     public COFFHeader(ByteArrayInputStream bytes) {
         DataInputStream dataInputStream = new DataInputStream(bytes)
 
@@ -43,5 +46,6 @@ class COFFHeader {
         PointerToSymbolTable = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
         NumberOfSymbols = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
         SizeOfOptionalHeader = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        Characteristics = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
     }
 }
