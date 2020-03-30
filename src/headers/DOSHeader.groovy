@@ -1,5 +1,8 @@
 package headers
 
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+
 class DOSHeader {
     private static final int HEADER_LENGTH = 64
 
@@ -63,24 +66,24 @@ class DOSHeader {
     public DOSHeader(ByteArrayInputStream bytes) {
         DataInputStream dataInputStream = new DataInputStream(bytes)
 
-        MZSignature = dataInputStream.readShort()
-        UsedBytesInTheLastPage = dataInputStream.readShort()
-        FileSizeInPages = dataInputStream.readShort()
-        NumberOfRelocationItems = dataInputStream.readShort()
-        HeaderSizeInParagraphs = dataInputStream.readShort()
-        MinimumExtraParagraphs = dataInputStream.readShort()
-        MaximumExtraParagraphs = dataInputStream.readShort()
-        InitialRelativeSS = dataInputStream.readShort()
-        InitialSP = dataInputStream.readShort()
-        Checksum = dataInputStream.readShort()
-        InitialIP = dataInputStream.readShort()
-        InitialRelativeCS = dataInputStream.readShort()
-        AddressOfRelocationTable = dataInputStream.readShort()
-        OverlayNumber = dataInputStream.readShort()
-        Reserved = dataInputStream.readNBytes(4)
-        OEMid = dataInputStream.readShort()
-        OEMinfo = dataInputStream.readShort()
-        Reserved2 = dataInputStream.readNBytes(10)
-        AddressOfNewExeHeader = dataInputStream.readShort()
+        MZSignature = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        UsedBytesInTheLastPage = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        FileSizeInPages = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        NumberOfRelocationItems = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        HeaderSizeInParagraphs = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        MinimumExtraParagraphs = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        MaximumExtraParagraphs = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        InitialRelativeSS = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        InitialSP = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        Checksum = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        InitialIP = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        InitialRelativeCS = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        AddressOfRelocationTable = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        OverlayNumber = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        Reserved = dataInputStream.readNBytes(8)
+        OEMid = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        OEMinfo = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        Reserved2 = dataInputStream.readNBytes(20)
+        AddressOfNewExeHeader = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
     }
 }

@@ -1,5 +1,7 @@
 package headers
 
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.sql.Timestamp
 
 class COFFHeader {
@@ -15,7 +17,7 @@ class COFFHeader {
      * The time that the linker (or compiler for an OBJ file) produced this file. This field holds the number of seconds since December
      * 31st, 1969, at 4:00 P.M. (PST)
      */
-    public final Timestamp TimeDateStamp
+    public final int TimeDateStamp
 
     /**
      * The file offset of the COFF symbol table. This field is only used in OBJ files and PE files with COFF debug information. PE files
@@ -36,11 +38,11 @@ class COFFHeader {
     public COFFHeader(ByteArrayInputStream bytes) {
         DataInputStream dataInputStream = new DataInputStream(bytes)
 
-        Machine = dataInputStream.readShort()
-        NumberOfSections = dataInputStream.readShort()
-        TimeDateStamp = dataInputStream.readInt()
-        PointerToSymbolTable = dataInputStream.readInt()
-        NumberOfSymbols = dataInputStream.readInt()
-        SizeOfOptionalHeader = dataInputStream.readInt()
+        Machine = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        NumberOfSections = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        TimeDateStamp = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
+        PointerToSymbolTable = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
+        NumberOfSymbols = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
+        SizeOfOptionalHeader = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
     }
 }
