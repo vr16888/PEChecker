@@ -46,7 +46,7 @@ class DOSHeader {
     public final short OverlayNumber
 
     /** Reserved words */
-    public final short[] Reserved
+    public final byte[] Reserved
 
     /** OEM identifier (for OEMinfo) */
     public final short OEMid
@@ -55,14 +55,32 @@ class DOSHeader {
     public final short OEMinfo
 
     /** Reserved words */
-    public final short[] Reserved2
+    public final byte[] Reserved2
 
     /** NtHeader Offset */
     public final int AddressOfNewExeHeader
 
-    public DOSHeader(Byte[] bytes) {
-        if (bytes.length == HEADER_LENGTH) {
+    public DOSHeader(ByteArrayInputStream bytes) {
+        DataInputStream dataInputStream = new DataInputStream(bytes)
 
-        }
+        MZSignature = dataInputStream.readShort()
+        UsedBytesInTheLastPage = dataInputStream.readShort()
+        FileSizeInPages = dataInputStream.readShort()
+        NumberOfRelocationItems = dataInputStream.readShort()
+        HeaderSizeInParagraphs = dataInputStream.readShort()
+        MinimumExtraParagraphs = dataInputStream.readShort()
+        MaximumExtraParagraphs = dataInputStream.readShort()
+        InitialRelativeSS = dataInputStream.readShort()
+        InitialSP = dataInputStream.readShort()
+        Checksum = dataInputStream.readShort()
+        InitialIP = dataInputStream.readShort()
+        InitialRelativeCS = dataInputStream.readShort()
+        AddressOfRelocationTable = dataInputStream.readShort()
+        OverlayNumber = dataInputStream.readShort()
+        Reserved = dataInputStream.readNBytes(4)
+        OEMid = dataInputStream.readShort()
+        OEMinfo = dataInputStream.readShort()
+        Reserved2 = dataInputStream.readNBytes(10)
+        AddressOfNewExeHeader = dataInputStream.readShort()
     }
 }
