@@ -1,6 +1,7 @@
 package headers
 
 import enums.MagicNumber
+import enums.Subsystem
 import types.ImageDataDir
 
 import java.nio.ByteBuffer
@@ -35,7 +36,7 @@ class OptionalHeader {
     public final int SIZE_OF_IMAGE
     public final int SIZE_OF_HEADERS
     public final int CHECKSUM
-    public final short SUBSYSTEM
+    public final Subsystem SUBSYSTEM
     public final short DLL_CHARACTERISTICS
 
     public final long SIZE_OF_STACK_RESERVE
@@ -99,7 +100,7 @@ class OptionalHeader {
         SIZE_OF_IMAGE = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
         SIZE_OF_HEADERS = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
         CHECKSUM = ByteBuffer.wrap(dataInputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
-        SUBSYSTEM = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
+        SUBSYSTEM = Subsystem.valueOf(ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort())
         DLL_CHARACTERISTICS = ByteBuffer.wrap(dataInputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort()
 
         if (IS_32_BIT) {
