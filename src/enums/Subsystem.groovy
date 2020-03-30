@@ -29,4 +29,8 @@ enum Subsystem {
     public static Subsystem valueOf(short subsystem) {
         return (Subsystem) map.get(subsystem);
     }
+
+    short getSubsystem() {
+        return subsystem
+    }
 }

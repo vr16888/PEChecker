@@ -22,4 +22,8 @@ enum MagicNumber {
     public static MagicNumber valueOf(short magicNumber) {
         return (MagicNumber) map.get(magicNumber);
     }
+
+    short getMagicNumber() {
+        return magicNumber
+    }
 }

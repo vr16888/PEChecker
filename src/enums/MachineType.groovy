@@ -39,4 +39,8 @@ enum MachineType {
     public static MachineType valueOf(short machineType) {
         return (MachineType) map.get(machineType);
     }
+
+    short getMachineType() {
+        return machineType
+    }
 }
